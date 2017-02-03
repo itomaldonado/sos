@@ -111,7 +111,7 @@ def post_order():
         new_order['city'] = request.form['city']
         new_order['state'] = request.form['state']
         new_order['zipcode'] = request.form['zipcode']
-        new_order['dueDate'] = request.form['dueDate']
+        new_order['dueDate'] = get_date(str(request.form['dueDate'])).strftime('%m/%d/%Y')
         new_order['productType'] = request.form['productType']
 
     # call the order validation function
@@ -185,10 +185,23 @@ def validate_empty_order(order={}):
 def validate_due_date(order={}):
     if (str(order['dueDate']) is "" or order['dueDate'] is None):
         return False, 'due date is empty'
-    elif (datetime.strptime(order['dueDate'],"%m/%d/%Y") - datetime.now()).days < 5:
+    due_date = get_date(str(order['dueDate']))
+    if (due_date - datetime.now()).days < 5:
         return False, 'due date is too early'
     else:
         return True, ''
+
+def get_date(str_date=None):
+    ret_date = None
+    if str_date:
+        # Try to convert date
+        try:
+            ret_date = datetime.strptime(str_date,"%m/%d/%Y")
+        except ValueError as ve:
+            ret_date = datetime.strptime(str_date,"%Y-%m-%d")
+        except Exception as e:
+            raise
+    return ret_date
 
 # Simple insert
 def insert(db_conn, table, fields=(), values=()):
