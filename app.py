@@ -1,6 +1,6 @@
-from flask import Flask, jsonify, request, abort, make_response, render_template
+from flask import Flask, jsonify, request, abort, make_response, render_template, url_for
 from datetime import datetime, timedelta
-import os, errno, sqlite3
+import os, errno, sqlite3, socket
 
 # Flask light-weight web server.
 server = Flask(__name__)
@@ -39,7 +39,8 @@ def get_root():
 # Returns the hostname.
 @server.route('/hostname', methods=['GET'])
 def get_hostname():
-    return os.getenv('HOSTNAME', 'None')
+    print(url_for('static', filename='style.css'))
+    return render_template('hostname.html', hostname=str(socket.gethostname()))
 
 # Get a specific order by calling /{server_name}/orders/<order_id>
 @server.route('/{0}/orders/<order_id>'.format(server_name), methods=['GET'])

@@ -8,6 +8,7 @@ LABEL maintainer "mo.maldonado@gmail.com"
 ADD requirements.txt /home/python/
 ADD app.py /home/python/
 ADD templates/ /home/python/templates/
+ADD static/ /home/python/static/
 
 # Installing all requirements
 RUN pip install -q --upgrade pip
