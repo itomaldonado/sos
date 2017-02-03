@@ -36,6 +36,10 @@ def not_found(error):
 def get_root():
     return render_template('oep.html', entries=products, server_name=str(server_name).upper())
 
+# Returns the hostname.
+@server.route('/hostname', methods=['GET'])
+def get_hostname():
+    return os.getenv('HOSTNAME', 'None')
 
 # Get a specific order by calling /{server_name}/orders/<order_id>
 @server.route('/{0}/orders/<order_id>'.format(server_name), methods=['GET'])
